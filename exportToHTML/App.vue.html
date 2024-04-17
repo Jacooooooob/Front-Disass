@@ -1,0 +1,136 @@
+<html>
+<head>
+<title>App.vue</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #d5b778;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bababa;}
+.s3 { color: #6aab73;}
+.s4 { color: #7a7e85;}
+.s5 { color: #cf8e6d;}
+.s6 { color: #2aacb8;}
+.s7 { color: #56a8f5;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+App.vue</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;template&gt;</span>
+  <span class="s0">&lt;div </span><span class="s2">id</span><span class="s3">=&quot;app&quot;</span><span class="s0">&gt;</span>
+    <span class="s4">&lt;!-- 侧边栏按钮 --&gt;</span>
+    <span class="s0">&lt;button</span>
+        <span class="s2">class</span><span class="s3">=&quot;sidebar-toggle&quot;</span>
+        <span class="s2">:class</span><span class="s3">=&quot;</span><span class="s1">{ </span><span class="s3">'open'</span><span class="s1">: isSidebarOpen }</span><span class="s3">&quot;</span>
+        <span class="s2">@click</span><span class="s3">=&quot;</span><span class="s1">toggleSidebar</span><span class="s3">&quot;</span>
+    <span class="s0">&gt;&lt;/button&gt;</span>
+
+    <span class="s4">&lt;!-- 侧边栏 --&gt;</span>
+    <span class="s0">&lt;div </span><span class="s2">class</span><span class="s3">=&quot;sidebar&quot; </span><span class="s2">:class</span><span class="s3">=&quot;</span><span class="s1">{ open: isSidebarOpen }</span><span class="s3">&quot;</span><span class="s0">&gt;</span>
+      <span class="s4">&lt;!-- 侧边栏内容 --&gt;</span>
+      <span class="s0">&lt;p&gt;</span><span class="s1">Sidebar content here...</span><span class="s0">&lt;/p&gt;</span>
+    <span class="s0">&lt;/div&gt;</span>
+
+    <span class="s4">&lt;!-- 主内容区域 --&gt;</span>
+    <span class="s0">&lt;div </span><span class="s2">class</span><span class="s3">=&quot;app-container&quot; </span><span class="s2">:class</span><span class="s3">=&quot;</span><span class="s1">{ shifted: isSidebarOpen }</span><span class="s3">&quot;</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;h1&gt;</span><span class="s1">AI Disassembler</span><span class="s0">&lt;/h1&gt;</span>
+
+      <span class="s4">&lt;!-- 文件上传板块 --&gt;</span>
+      <span class="s0">&lt;file-upload </span><span class="s2">@file-uploaded</span><span class="s3">=&quot;</span><span class="s1">handleFileUpload</span><span class="s3">&quot;</span><span class="s0">&gt;&lt;/file-upload&gt;</span>
+
+      <span class="s4">&lt;!-- 反汇编结果展示板块 --&gt;</span>
+      <span class="s0">&lt;disassembly-results </span><span class="s2">:fileUrl</span><span class="s3">=&quot;</span><span class="s1">resultFileUrl</span><span class="s3">&quot; </span><span class="s2">:results</span><span class="s3">=&quot;</span><span class="s1">disassemblyResults</span><span class="s3">&quot;</span><span class="s0">&gt;&lt;/disassembly-results&gt;</span>
+    <span class="s0">&lt;/div&gt;</span>
+  <span class="s0">&lt;/div&gt;</span>
+<span class="s0">&lt;/template&gt;</span>
+
+<span class="s0">&lt;script&gt;</span>
+<span class="s5">import </span><span class="s1">FileUpload from </span><span class="s3">'@/components/FileUpload.vue'</span><span class="s1">;</span>
+<span class="s5">import </span><span class="s1">DisassemblyResults from </span><span class="s3">'@/components/DisassemblyResults.vue'</span><span class="s1">;</span>
+
+<span class="s5">export default </span><span class="s1">{</span>
+  <span class="s1">components: {</span>
+    <span class="s1">FileUpload,</span>
+    <span class="s1">DisassemblyResults</span>
+  <span class="s1">},</span>
+  <span class="s1">data() {</span>
+    <span class="s5">return </span><span class="s1">{</span>
+      <span class="s1">isSidebarOpen: open,</span>
+      <span class="s1">isDisassembling: </span><span class="s5">false</span><span class="s1">,</span>
+      <span class="s1">disassemblyComplete: </span><span class="s5">false</span><span class="s1">,</span>
+      <span class="s1">progress: </span><span class="s6">0</span><span class="s1">,</span>
+      <span class="s1">disassemblyLog: </span><span class="s3">''</span><span class="s1">,</span>
+      <span class="s1">resultFileUrl: </span><span class="s3">''</span><span class="s1">,</span>
+      <span class="s1">disassemblyResults: </span><span class="s3">''</span>
+    <span class="s1">};</span>
+  <span class="s1">},</span>
+  <span class="s1">methods: {</span>
+    <span class="s1">toggleSidebar() {</span>
+      <span class="s5">this</span><span class="s1">.isSidebarOpen = !</span><span class="s5">this</span><span class="s1">.isSidebarOpen;</span>
+    <span class="s1">},</span>
+    <span class="s1">handleFileUpload(file) {</span>
+      <span class="s4">// Handle file upload logic here</span>
+      <span class="s1">console.log(</span><span class="s3">'File uploaded:'</span><span class="s1">, file.name);</span>
+      <span class="s4">// Assume the disassembly process starts here</span>
+      <span class="s5">this</span><span class="s1">.startDisassembly(file);</span>
+    <span class="s1">},</span>
+    <span class="s1">startDisassembly(file) {</span>
+      <span class="s4">// Mock disassembly process</span>
+      <span class="s5">this</span><span class="s1">.isDisassembling = </span><span class="s5">true</span><span class="s1">;</span>
+      <span class="s1">setTimeout(() =&gt; {</span>
+        <span class="s5">this</span><span class="s1">.progress = </span><span class="s6">100</span><span class="s1">;</span>
+        <span class="s5">this</span><span class="s1">.disassemblyLog = </span><span class="s3">'Disassembly complete!'</span><span class="s1">;</span>
+        <span class="s5">this</span><span class="s1">.isDisassembling = </span><span class="s5">false</span><span class="s1">;</span>
+        <span class="s5">this</span><span class="s1">.disassemblyComplete = </span><span class="s5">true</span><span class="s1">;</span>
+        <span class="s4">// Set the actual results and download link</span>
+        <span class="s5">this</span><span class="s1">.resultFileUrl = </span><span class="s3">'path/to/resultFile.txt'</span><span class="s1">;</span>
+        <span class="s5">this</span><span class="s1">.disassemblyResults = </span><span class="s3">'Disassembly results here...'</span><span class="s1">;</span>
+      <span class="s1">}, </span><span class="s6">3000</span><span class="s1">);</span>
+    <span class="s1">}</span>
+  <span class="s1">}</span>
+<span class="s1">};</span>
+<span class="s0">&lt;/script&gt;</span>
+
+<span class="s0">&lt;style&gt;</span>
+<span class="s4">/* Import global styles */</span>
+<span class="s5">@import </span><span class="s3">'./assets/styles/main.css'</span><span class="s1">;</span>
+
+<span class="s1">.</span><span class="s0">sidebar-toggle </span><span class="s1">{</span>
+  <span class="s4">/* Adjust the button's initial position and style */</span>
+  <span class="s2">position</span><span class="s1">: </span><span class="s3">fixed</span><span class="s1">;</span>
+  <span class="s2">top</span><span class="s1">: </span><span class="s6">50</span><span class="s1">%;</span>
+  <span class="s2">left</span><span class="s1">: </span><span class="s6">0</span><span class="s1">;</span>
+  <span class="s2">z-index</span><span class="s1">: </span><span class="s6">200</span><span class="s1">;</span>
+  <span class="s2">background-color</span><span class="s1">: </span><span class="s3">transparent</span><span class="s1">;</span>
+  <span class="s2">border</span><span class="s1">: </span><span class="s3">none</span><span class="s1">;</span>
+  <span class="s2">cursor</span><span class="s1">: </span><span class="s3">pointer</span><span class="s1">;</span>
+  <span class="s2">transform</span><span class="s1">: </span><span class="s0">translateY</span><span class="s1">(-</span><span class="s6">50</span><span class="s1">%);</span>
+  <span class="s2">transition</span><span class="s1">: </span><span class="s3">left </span><span class="s6">0.3</span><span class="s3">s</span><span class="s1">; </span><span class="s4">/* This will animate the movement */</span>
+<span class="s1">}</span>
+
+<span class="s1">.</span><span class="s0">sidebar-toggle</span><span class="s1">::</span><span class="s0">before </span><span class="s1">{</span>
+  <span class="s4">/* Create a line */</span>
+  <span class="s2">content</span><span class="s1">: </span><span class="s3">''</span><span class="s1">;</span>
+  <span class="s2">display</span><span class="s1">: </span><span class="s3">block</span><span class="s1">;</span>
+  <span class="s2">height</span><span class="s1">: </span><span class="s6">20</span><span class="s3">px</span><span class="s1">;</span>
+  <span class="s2">width</span><span class="s1">: </span><span class="s6">2</span><span class="s3">px</span><span class="s1">;</span>
+  <span class="s2">background-color</span><span class="s1">: </span><span class="s7">#aaa</span><span class="s1">; </span><span class="s4">/* Initial gray color */</span>
+  <span class="s2">transition</span><span class="s1">: </span><span class="s3">background-color </span><span class="s6">0.3</span><span class="s3">s</span><span class="s1">; </span><span class="s4">/* This will animate the color change */</span>
+<span class="s1">}</span>
+
+<span class="s1">.</span><span class="s0">sidebar-toggle</span><span class="s1">:</span><span class="s0">hover</span><span class="s1">::</span><span class="s0">before </span><span class="s1">{</span>
+  <span class="s4">/* Change the line color on hover */</span>
+  <span class="s2">background-color</span><span class="s1">: </span><span class="s3">black</span><span class="s1">; </span><span class="s4">/* Hover color */</span>
+<span class="s1">}</span>
+
+<span class="s1">.</span><span class="s0">sidebar-toggle</span><span class="s1">.</span><span class="s0">open </span><span class="s1">{</span>
+  <span class="s4">/* Position the toggle button on the sidebar when open */</span>
+  <span class="s2">left</span><span class="s1">: </span><span class="s6">250</span><span class="s3">px</span><span class="s1">; </span><span class="s4">/* Should match the sidebar's width */</span>
+<span class="s1">}</span>
+
+<span class="s0">&lt;/style&gt;</span></pre>
+</body>
+</html>

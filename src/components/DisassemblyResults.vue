@@ -1,7 +1,13 @@
 <template>
-  <div class="card disassembly-results">
-    <h2>Results</h2>
-    <a :href="fileUrl" download="disassembly.txt" class="download-btn">Download Results</a>
+  <div class="card combined-results">
+    <h2>Disassembly Results</h2>
+    <!-- 下载按钮 -->
+    <a :href="fileUrl" download="disassembly.txt" class="download-btn">
+      Download Results
+    </a>
+    <!-- 进度条 -->
+    <progress max="100" :value="progress"></progress>
+    <!-- 流式输出的文本框 -->
     <textarea :value="results" readonly></textarea>
   </div>
 </template>
@@ -9,8 +15,18 @@
 <script>
 export default {
   props: {
-    fileUrl: String,
-    results: String
+    fileUrl: {
+      type: String,
+      default: ''
+    },
+    results: {
+      type: String,
+      default: ''
+    },
+    progress: {
+      type: Number,
+      default: 0
+    }
   }
 };
 </script>
@@ -29,7 +45,6 @@ export default {
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-/* 由于使用了scoped，h2和.download-btn的样式需要在这里重复 */
 h2 {
   font-size: 1.5rem;
   color: #1a73e8;
@@ -45,7 +60,7 @@ h2 {
   color: #ffffff;
   padding: 10px 20px;
   border-radius: 4px;
-  margin-top: 20px;
+  margin-bottom: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -55,8 +70,14 @@ h2 {
 }
 
 textarea {
-  width: 97%;
-  height: 300px;
+  width: 97.3%;
+  height: 150px; /* 或根据需要调整高度 */
   margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #d3d3d3;
+  border-radius: 4px;
+  resize: vertical; /* 允许用户调整文本框大小 */
+  font-family: monospace;
+  background-color: #f8f8f8;
 }
 </style>

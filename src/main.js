@@ -1,13 +1,14 @@
-import './assets/styles/main.css';
-
+// main.js
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router';  // 导入Vue Router
-import store from './store';    // 导入Vuex Store
-import axios from 'axios';
+import router from './router';
+import store from './store';
 
-// 创建Vue实例并挂载到#app元素上
-createApp(App)
-    .use(router)  // 使用Vue Router
-    .use(store)   // 使用Vuex Store
-    .mount('#app');
+
+const app = createApp(App);
+
+app.use(router);
+app.use(store);
+
+// 挂载 Vue 应用到 DOM
+app.mount('#app');

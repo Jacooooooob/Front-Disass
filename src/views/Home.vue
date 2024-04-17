@@ -14,13 +14,11 @@
 <script>
 import axios from 'axios';
 import FileUpload from '@/components/FileUpload.vue';
-import DisassemblyProcess from '@/components/DisassemblyProcess.vue';
 import DisassemblyResults from '@/components/DisassemblyResults.vue';
 
 export default {
   components: {
     FileUpload,
-    DisassemblyProcess,
     DisassemblyResults
   },
   data() {

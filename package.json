@@ -10,8 +10,13 @@
   },
   "dependencies": {
     "axios": "^1.6.8",
-    "vue": "^3.4.21",
+    "particles.vue3": "^2.12.0",
+    "tsparticles": "^3.3.0",
+    "tsparticles-engine": "^2.12.0",
+    "vue": "^3.4.23",
+    "vue-particles": "^1.0.9",
     "vue-router": "^4.0.13",
+    "vue3-particles": "^2.12.0",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
