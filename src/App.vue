@@ -7,12 +7,12 @@
         @click="toggleSidebar"
     ></button>
 
-    <!-- 侧边栏 -->
+    <!-- sidebar -->
     <div class="sidebar" :class="{ open: isSidebarOpen }">
-      <!-- 新增任务按钮 -->
-      <button class="new-task-btn" @click="createNewTask" style="color: white;">➕ 新建任务</button>
+      <!-- new task button -->
+      <button class="new-task-btn" @click="createNewTask" style="color: white;">➕ New Task</button>
 
-      <!-- 历史记录列表 -->
+      <!-- history list -->
       <ul class="history-list">
         <li v-for="task in sortedTasks" :key="task.id">
           <div class="task-info">
@@ -20,7 +20,7 @@
 <!--            <span class="task-date">{{ task.date | formatDate }}</span>-->
           </div>
           <span class="task-status">{{ task.status }}</span>
-          <!-- 垃圾桶图标表示删除按钮 -->
+          <!-- The trash can icon represents the delete button -->
           <button class="delete-btn" @click="deleteTask(task.id)">
             🗑️
           </button>
@@ -29,12 +29,12 @@
 
     </div>
 
-    <!-- 主内容区域 -->
+    <!-- Main content area -->
     <div class="app-container" :class="{ shifted: isSidebarOpen }">
-      <h1>AI Disassembler</h1>
-      <!-- 文件上传板块 -->
+      <h1>GraphFormer Disassembler</h1>
+      <!-- File upload section -->
       <file-upload @file-uploaded="handleFileUpload"></file-upload>
-      <!-- 反汇编结果展示板块 -->
+      <!-- Disassembly results display section -->
       <disassembly-results :fileUrl="resultFileUrl" :results="disassemblyResults"></disassembly-results>
     </div>
   </div>
@@ -71,7 +71,8 @@ export default {
       this.isSidebarOpen = !this.isSidebarOpen;
     },
     createNewTask() {
-      // 添加新任务的示例逻辑，这里只是硬编码的示例
+      // Example logic for adding a new task, here is just a hard-coded example
+      // TODO
       const newTask = {
         id: this.tasks.length + 1,
         title: `New Task ${this.tasks.length + 1}`,
@@ -81,12 +82,13 @@ export default {
       this.tasks.push(newTask);
     },
     selectTask(task) {
-      // 选择任务的逻辑，这里可以设置当前选中的任务，打开详细视图等
-      // 这里只是打印到控制台作为示例
+      // Select the task logic, here you can set the currently selected task, open the detailed view and so on
+      // This is only printed to the console as an example
+      // TODO
       console.log('Selected task:', task);
     },
     deleteTask(taskId) {
-      // 删除指定的任务
+      // Deletes the specified task
       this.tasks = this.tasks.filter(task => task.id !== taskId);
     },
     handleFileUpload(file) {
@@ -95,7 +97,8 @@ export default {
     },
     startDisassembly(file) {
       console.log('Disassembly started for:', file.name);
-      // 模拟反汇编过程
+      // Simulate the disassembly process
+      // TODO
       this.isDisassembling = true;
       setTimeout(() => {
         this.progress = 100;
@@ -106,7 +109,8 @@ export default {
         this.disassemblyResults = 'Simulated disassembly results here...';
       }, 3000);
     },
-    // 其他方法...
+    // Other method...
+    // TODO
   }
 };
 </script>

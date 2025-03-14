@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-    <!-- 文件上传板块 -->
+    <!-- File Upload Section -->
     <file-upload @file-uploaded="startDisassembly" />
 
-    <!-- 反汇编过程展示板块 -->
+    <!-- Disassembly Process Display Section -->
     <disassembly-process v-if="isDisassembling" :progress="progress" :log="disassemblyLog" />
 
-    <!-- 反汇编结果展示板块 -->
+    <!-- Disassembly Results Display Section -->
     <disassembly-results v-if="disassemblyComplete" :resultFileUrl="resultFileUrl" :results="disassemblyResults" />
   </div>
 </template>

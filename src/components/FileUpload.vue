@@ -5,22 +5,71 @@
     <div class="drop-zone" @click="triggerFileInput" @drop.prevent="handleDrop" @dragover.prevent>
       Drop your binary file here or click to upload.
     </div>
+    <!-- Display upload progress or upload status information -->
+    <div v-if="isUploading" class="uploading-info">
+      Uploading... {{ uploadProgress }}%
+    </div>
+    <div v-else-if="uploadStatus" class="upload-status">
+      {{ uploadStatus }}
+    </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
+  data() {
+    return {
+      isUploading: false,
+      uploadProgress: 0,
+      uploadStatus: ''
+    };
+  },
   methods: {
     triggerFileInput() {
       this.$refs.fileInput.click();
     },
     handleFileUpload(event) {
       const file = event.target.files[0];
-      this.$emit('file-uploaded', file);
+      if (file) {
+        this.uploadFile(file);
+      }
     },
     handleDrop(event) {
       const file = event.dataTransfer.files[0];
-      this.$emit('file-uploaded', file);
+      if (file) {
+        this.uploadFile(file);
+      }
+    },
+    uploadFile(file) {
+      this.isUploading = true;
+      this.uploadProgress = 0;
+      this.uploadStatus = '';
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Use axios to upload the file and monitor the upload progress
+      axios.post('/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        onUploadProgress: progressEvent => {
+          this.uploadProgress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        }
+      })
+          .then(response => {
+            this.uploadStatus = 'Upload successful.';
+            this.isUploading = false;
+            // Emit event, may need to pass server response or file info to parent component
+            this.$emit('file-uploaded', response.data);
+          })
+          .catch(error => {
+            this.uploadStatus = 'Upload failed.';
+            this.isUploading = false;
+            console.error('There was an error uploading the file', error);
+          });
     }
   }
 };
@@ -58,5 +107,21 @@ h2 {
 
 .drop-zone:hover {
   border-color: #1a73e8;
+}
+
+.uploading-info, .upload-status {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.uploading-info {
+  color: #017CFF;
+}
+
+.upload-status {
+  color: #28a745;
+  /* Or if the upload failed, you can set it to red */
+  /* color: #dc3545; */
 }
 </style>

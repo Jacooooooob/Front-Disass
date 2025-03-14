@@ -10,5 +10,4 @@ const app = createApp(App);
 app.use(router);
 app.use(store);
 
-// 挂载 Vue 应用到 DOM
 app.mount('#app');
